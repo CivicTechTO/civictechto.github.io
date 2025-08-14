@@ -1,26 +1,20 @@
 # Makefile for CivicTech.ca GitHub Pages Migration Evaluation
 
-REPO_URL=https://github.com/CivicTechTO/civictechto.github.io.git
 JEKYLL=bundle exec jekyll
 SCRIPTS_DIR=./_scripts
 
-# Default target
-all: serve
-
-# Clone the repository
-clone:
-	git clone $(REPO_URL)
-
-# Install Ruby dependencies
-install:
-	bundle install
+prepare:
+	build install
+	generate
 
 # Start Jekyll server
 serve:
+	prepate
 	$(JEKYLL) serve
 
 # Start Jekyll server with incremental regeneration
 serve-incremental:
+	prepare
 	$(JEKYLL) serve --incremental
 
 # Generate category and tag data
@@ -33,8 +27,11 @@ generate-pages:
 	$(SCRIPTS_DIR)/generate_category_pages.sh
 	$(SCRIPTS_DIR)/generate_tag_pages.sh
 
+generate-thumbnails:
+	$(SCRIPTS_DIR)/thumbnail_sizes.sh
+
 # Generate all content
-generate: generate-data generate-pages
+generate: generate-data generate-pages generate-thumbnails
 
 # Update Git submodules
 update:
